@@ -6,6 +6,10 @@
 
 {% block body %}
 
+    <div>
+        <a href="{{ path('exercice_twig') }}">Voir l'exercice Twig</a>
+    </div>
+
     <p>
         Je m'appelle {{ firstname }} {{ lastname }} et j'ai {{ age }} ans.
     </p>
@@ -53,6 +57,12 @@
         {{ friend2 }}
     {% endfor %}
 
-    <h1>J'ai fini mon test !</h1>
+    <br><br>
+
+    {# Filtre personnalisé #}
+    <div>
+        Cet article coûte {{ 1019.99|price }}
+    </div>
+
 
 {% endblock %}
