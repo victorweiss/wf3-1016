@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    On est sur la page test !
+{% endblock %}
+
+{% block body %}
+
+    <p>
+        Je m'appelle {{ firstname }} {{ lastname }} et j'ai {{ age }} ans.
+    </p>
+
+    {# IF / ELSEIF / ELSE #}
+    <p>
+        {% if age > 30 %}
+            J'ai + de 30 ans
+        {% elseif age > 20 %}
+            J'ai entre 20 et 30 ans
+        {% else %}
+            J'ai - de 20 ans
+        {% endif %}
+    </p>
+
+    {# CONDITION EN TERNAIRE #}
+    <p>
+        J'ai {{ age > 30 ? '+' : '-' }} de 30 ans
+    </p>
+
+    {# BOUCLE FOR #}
+    <p>
+        Mes amis s'appellent
+        {% for friend in friends %}
+            {{ friend }}{{ loop.last ? '.' : ',' }}
+        {% endfor %}
+    </p>
+
+    {# FILTERS #}
+    <p>
+        Mes amis s'appellent {{ friends|join(', ', ' et ')|upper }}.
+    </p>
+
+    <p>
+        {{ (-10)|abs }}
+        <br>
+        {{ "je m'appelle victor"|capitalize }}
+        <br>
+        Nous sommes le {{ 'now'|date('Y-m-d') }}
+    </p>
+
+    {# set : permet de définir une variable directement dans un template #}
+    {% set friends2 = ['Pierre', 'Paul', 'Jacques', 'Jean'] %}
+    {% for friend2 in friends2 %}
+        {{ friend2 }}
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Exercice Twig
+{% endblock %}
+
+{% block body %}
+
+	<h3>Q1. </h3>
+	{% for personne in personnes %}
+		<div>
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3>Q2.</h3>
+	<h4>A) </h4>
+	{% for personne in personnes %}
+		{% if personne.nom == 'Dupont' %}
+			<div>
+				<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+				<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+			</div>
+		{% endif %}
+	{% endfor %}
+
+	<h4>B) </h4>
+	{% for personne in personnes|filter(p => p.nom == 'Dupont') %}
+		<div>
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3>Q3.</h3>
+
+	<h4>A) </h4>
+	{% for personne in personnes|slice(0, 3) %}
+		<div>
+			<b>{{ personne.nom|upper }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+	<h4>B) </h4>
+	{% for personne in personnes %}
+		{% if loop.index <= 3 %}
+			<div>
+				<b>{{ personne.nom|upper }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+				<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+			</div>
+		{% endif %}
+	{% endfor %}
+
+	<h4>C) </h4>
+	{% for key, personne in personnes %}
+		{% if key < 3 %}
+			<div>
+				<b>{{ personne.nom|upper }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+				<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+			</div>
+		{% endif %}
+	{% endfor %}
+
+	<hr>
+
+	<h3>Q4.</h3>
+	<h4>A)</h4>
+	{% for personne in personnes %}
+		{% if personne.naissance|date('Y') > 1950 %}
+			<div>
+				<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+				<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+			</div>
+		{% endif %}
+	{% endfor %}
+
+	<h4>B)</h4>
+	{% for personne in personnes|filter(p => p.naissance|date('Y') > 1950) %}
+		<div>
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3>Q5.</h3>
+	{% for personne in personnes|sort((a, b) => a.naissance <=> b.naissance) %}
+		<div>
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+
+	<hr>
+
+	<h3>Q6.</h3>
+
+	{% for personne in personnes %}
+		<div style="color: {{ loop.first ? 'blue' }}{{ loop.last ? 'red' }};">
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+	{% endfor %}
+
+	<hr>
+
+	<h3>Q7.</h3>
+
+	{% for personne in personnes %}
+		<div>
+			<b>{{ personne.nom }} {{ personne.prenom }}</b> ({{ personne.statut }}),
+			<i>date de naissance : {{ personne.naissance|date('d-m-Y') }}</i>
+		</div>
+		{% if not loop.index % 2 %}
+			<br>
+		{% endif %}
+{#		{% if loop.index is even %}#}
+{#			<br>#}
+{#		{% endif %}#}
+	{% endfor %}
+
+
+
+
+
+{% endblock %}
+
