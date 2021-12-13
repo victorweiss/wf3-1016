@@ -18,15 +18,20 @@ class AppExtension extends AbstractExtension
         ];
     }
 
-    // public function getFunctions(): array
-    // {
-    //     return [
-    //         new TwigFunction('function_name', [$this, 'doSomething']),
-    //     ];
-    // }
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('displayFooter', [$this, 'displayFooter'], ['is_safe' => ['html']]),
+        ];
+    }
 
     public function getPrice(int|float $number): string
     {
         return number_format($number, 2, ',', ' ') . ' €';
+    }
+
+    public function displayFooter(string $text): string
+    {
+        return "<div>FOOTER - $text</div>";
     }
 }
