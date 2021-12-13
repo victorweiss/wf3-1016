@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-moi{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1>Contactez-moi</h1>
+
+            <p>Nous vous répondrons sous 24 heures.</p>
+
+            <form method="POST" class="mt-5">
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
+                </div>
+
+                <div>
+                    <label for="message" class="form-label">Votre message :</label>
+                    <textarea name="message" id="message" rows="7" class="form-control"></textarea>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
