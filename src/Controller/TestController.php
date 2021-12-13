@@ -41,7 +41,7 @@ class TestController extends AbstractController
         );
 
         return $this->render('test/exercice_twig.html.twig', [
-            'personnes' => $personnes
+            'personnes' => $personnes,
         ]);
     }
 }
