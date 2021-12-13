@@ -1,0 +1,43 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Blog
+{% endblock %}
+
+{% block body %}
+	<h1>Blog</h1>
+
+	<div class="row mt-5">
+		{% for article in 1..12 %}
+			<div class="col-md-4 col-lg-3 mb-4">
+				<div class="card">
+{#					<img src="..." class="card-img-top" alt="...">#}
+					<div class="card-body">
+						<h5 class="card-title">Titre...</h5>
+						<p class="card-text">Aperçu...</p>
+						<a href="{{ path('blog_article') }}" class="btn btn-primary">Lire l'article</a>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+	{# Pagination #}
+	<nav aria-label="Page navigation example" class="mt-5">
+		<ul class="pagination justify-content-center">
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li class="page-item"><a class="page-link" href="#">1</a></li>
+			<li class="page-item"><a class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+{% endblock %}
