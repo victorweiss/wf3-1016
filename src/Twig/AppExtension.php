@@ -15,6 +15,7 @@ class AppExtension extends AbstractExtension
             // parameter: ['is_safe' => ['html']]
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('price', [$this, 'getPrice']),
+            new TwigFilter('ellipsis', [$this, 'makeEllipsis']),
         ];
     }
 
@@ -33,5 +34,11 @@ class AppExtension extends AbstractExtension
     public function displayFooter(string $text): string
     {
         return "<div>FOOTER - $text</div>";
+    }
+
+    public function makeEllipsis(string $text, int $length = 20): string
+    {
+        $dots = strlen($text) > $length ? '...' : '';
+        return substr($text, 0, $length) . $dots;
     }
 }
