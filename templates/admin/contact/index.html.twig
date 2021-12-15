@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Demandes de contact" %}
+
+{% block body %}
+    <h1>Demandes de contact</h1>
+
+    <table class="table table-striped mt-5">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Email</th>
+                <th>Aperçu</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.id }}</td>
+                    <td>{{ contact.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.message|slice(0,20) }}...</td>
+                    <td>
+                        ..btn..
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
