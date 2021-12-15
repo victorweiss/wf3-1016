@@ -5,7 +5,14 @@
 {% block body %}
     <h1>Demandes de contact</h1>
 
-    <table class="table table-striped mt-5">
+    <form method="GET">
+        <div class="input-group mb-3 mt-5">
+            <input type="text" name="q" class="form-control" placeholder="Recherche..." aria-label="Recherche..." aria-describedby="button-addon2">
+            <button class="btn btn-outline-primary" type="submit" id="button-addon2">Rechercher</button>
+        </div>
+    </form>
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -23,6 +30,7 @@
                     <td>{{ contact.email }}</td>
                     <td>{{ contact.message|ellipsis }}</td>
                     <td>
+                        <a href="{{ path('admin_contact_delete', {id: contact.id}) }}" class="btn btn-sm btn-danger me-2">Supprimer</a>
                         <a href="{{ path('admin_contact_view', {id: contact.id}) }}" class="btn btn-sm btn-primary">Voir</a>
                     </td>
                 </tr>

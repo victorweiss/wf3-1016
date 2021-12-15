@@ -4,7 +4,10 @@ namespace App\Controller\Admin;
 
 use App\Entity\Contact;
 use App\Repository\ContactRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -12,9 +15,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContactController extends AbstractController
 {
     #[Route('', name: 'admin_contact_index')]
-    public function index(ContactRepository $contactRepository): Response
+    public function index(ContactRepository $contactRepository, Request $request): Response
     {
-        $contacts = $contactRepository->findBy([], ['id' => 'DESC']);
+        if ($q = $request->query->get('q')) {
+            $contacts = $contactRepository->search($q);
+        } else {
+            $contacts = $contactRepository->findBy([], ['id' => 'DESC']);
+        }
 
         return $this->render('admin/contact/index.html.twig', [
             'contacts' => $contacts
@@ -27,5 +34,14 @@ class ContactController extends AbstractController
         return $this->render('admin/contact/view.html.twig', [
             'contact' => $contact,
         ]);
+    }
+
+    #[Route('/{id}/delete', name: 'admin_contact_delete')]
+    public function delete(Contact $contact, EntityManagerInterface $entityManager): RedirectResponse
+    {
+        $entityManager->remove($contact);
+        $entityManager->flush();
+        $this->addFlash('success', "Demande supprimée.");
+        return $this->redirectToRoute('admin_contact_index');
     }
 }
