@@ -10,23 +10,16 @@
 
             <p>Nous vous répondrons sous 24 heures.</p>
 
-            <form method="POST" class="mt-5">
+            {{ form_start(form) }}
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp">
-                </div>
+            {{ form_row(form.email) }}
+            {{ form_row(form.message) }}
 
-                <div>
-                    <label for="message" class="form-label">Votre message :</label>
-                    <textarea name="message" id="message" rows="7" class="form-control"></textarea>
-                </div>
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
 
-                <div class="text-end mt-3">
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
-                </div>
-
-            </form>
+            {{ form_end(form) }}
         </div>
     </div>
 

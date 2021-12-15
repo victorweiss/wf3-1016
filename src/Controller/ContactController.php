@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Contact;
+use App\Form\ContactType;
 use App\Service\NotifyService;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,6 +22,9 @@ class ContactController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
+        $form = $this->createForm(ContactType::class);
+
+
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
             $message = $request->request->get('message');
@@ -65,7 +69,7 @@ class ContactController extends AbstractController
         }
 
         return $this->render('contact/contact.html.twig', [
-
+            'form' => $form->createView(),
         ]);
     }
 }
