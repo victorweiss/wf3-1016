@@ -22,50 +22,36 @@ class ContactController extends AbstractController
         EntityManagerInterface $entityManager
     ): Response
     {
-        $form = $this->createForm(ContactType::class);
+        $contact = new Contact();
+        $form = $this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $contact->setCreatedAt(new DateTimeImmutable());
+            $entityManager->persist($contact);
+            $entityManager->flush();
 
-        if ($request->isMethod('POST')) {
-            $email = $request->request->get('email');
-            $message = $request->request->get('message');
+            // 1. Envoyer un email à l'admin
+            $templatedEmail = (new TemplatedEmail())
+                ->to($this->getParameter('email_website'))
+                ->replyTo($contact->getEmail())
+                ->subject("[Victor] Nouveau message du site")
+                ->htmlTemplate('contact/email/contact.email.twig')
+                ->context(['contact' => $contact]);
+            $notifyService->sendEmail($templatedEmail);
 
-            if ($email && $message) {
-                // 0. Enregistrer la demande en BDD
-                $contact = (new Contact())
-                    ->setEmail($email)
-                    ->setMessage($message)
-                    ->setCreatedAt(new DateTimeImmutable());
-                $entityManager->persist($contact);
-                $entityManager->flush();
+            // 2. Envoyer un accusé de réception à l'utilisateur
+            $templatedEmail = (new TemplatedEmail())
+                ->to($contact->getEmail())
+                ->subject("[Victor] Nous avons reçu votre message")
+                ->htmlTemplate('contact/email/contact_receipt.email.twig')
+                ->context(['contact' => $contact]);
+            $notifyService->sendEmail($templatedEmail);
 
-                // 1. Envoyer un email à l'admin
-                $templatedEmail = (new TemplatedEmail())
-                    ->to($this->getParameter('email_website'))
-                    ->replyTo($email)
-                    ->subject("[Victor] Nouveau message du site")
-                    ->htmlTemplate('contact/email/contact.email.twig')
-                    ->context([
-                        'contact' => $contact
-                    ]);
-                $notifyService->sendEmail($templatedEmail);
+            // 3. Afficher un message de succès
+            $this->addFlash('success', "Nous avons bien reçu votre message.");
 
-                // 2. Envoyer un accusé de réception à l'utilisateur
-                $templatedEmail = (new TemplatedEmail())
-                    ->to($email)
-                    ->subject("[Victor] Nous avons reçu votre message")
-                    ->htmlTemplate('contact/email/contact_receipt.email.twig')
-                    ->context([
-                        'contact' => $contact
-                    ]);
-                $notifyService->sendEmail($templatedEmail);
-
-                // 3. Afficher un message de succès
-                $this->addFlash('success', "Nous avons bien reçu votre message.");
-
-                return $this->redirectToRoute('contact');
-            } else {
-                $this->addFlash('danger', "Veuillez remplir correctement le formulaire.");
-            }
+            return $this->redirectToRoute('contact');
         }
 
         return $this->render('contact/contact.html.twig', [
