@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
+use App\Repository\BlogPostRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -36,7 +37,7 @@ class BlogController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // TODO : slug unique !
+            # TODO : slug unique !
             // 1. Remplir les propriétés manquantes
             $slug = $slugger->slug($post->getTitle())->lower();
             $post->setSlug($slug);
@@ -55,8 +56,11 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'admin_blog_update')]
-    public function update(): Response
+    public function update(BlogPost $post): Response
     {
+        dd($post);
+
+
         return $this->render('admin/blog/update.html.twig', [
 
         ]);

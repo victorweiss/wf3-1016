@@ -6,9 +6,11 @@ use App\Repository\BlogPostRepository;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
+#[UniqueEntity(fields: 'slug', message: "Ce slug est déjà utilisé")]
 class BlogPost
 {
     const STATUS_DRAFT = 'draft';
@@ -24,7 +26,7 @@ class BlogPost
     #[Assert\Length(min: 20, max: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string', length: 191, unique: true)]
     private ?string $slug = null;
 
     #[ORM\Column(type: 'text')]
