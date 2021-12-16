@@ -3,7 +3,10 @@
 {% block title "Gestion du blog" %}
 
 {% block body %}
-    <h1>Gestion du blog</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Gestion du blog</h1>
+        <a href="{{ path('admin_blog_create') }}" class="btn btn-primary">Ajouter</a>
+    </div>
 
     <p>.. liste des articles que j'ai écrits ..</p>
 {% endblock %}
