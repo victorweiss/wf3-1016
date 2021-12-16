@@ -26,6 +26,15 @@
 						<li class="nav-item">
 							<a class="nav-link" href="{{ path('contact') }}">Contact</a>
 						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Admin
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<li><a class="dropdown-item" href="{{ path('admin_contact_index') }}">Demandes de contact</a></li>
+								<li><a class="dropdown-item" href="{{ path('admin_blog_index') }}">Gestion du blog</a></li>
+							</ul>
+						</li>
 					</ul>
 					<ul class="navbar-nav mb-2 mb-lg-0">
 						<li class="nav-item">
