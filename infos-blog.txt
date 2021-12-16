@@ -1,0 +1,35 @@
+1. Créer les Controller
+    - BlogController
+        - index (liste des articles)
+        - view (affiche un article en particulier)
+    - Admin\BlogController
+        - index (liste les articles)
+            * Admin : liste tous les articles
+            * Membre : liste uniquement mes articles
+        - create (créer un nouvel article)
+        - update (modifier un article)
+        - delete (supprimer un article)
+
+2. Ajouter les liens dans le Header
+
+3. Créer l'Entity
+    BlogPost
+    - title, string
+    - slug, string
+    - content, text
+    - author, string
+    - createdAt, datetime_immutable
+    - updatedAt, datetime
+    - status, string (active|draft)
+
+    => Migration BDD
+
+4. Créer le form : BlogPostType
+    + Ajouter les Assert sur les propriétés de l'Entity
+
+    => Afficher le formulaire + Enregistrer
+
+5. Afficher la liste des articles dans l'admin
+
+6. Afficher la liste des articles côté front
+    + Faire la page pour lire l'article côté front
