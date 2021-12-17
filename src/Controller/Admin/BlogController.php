@@ -45,13 +45,21 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'admin_blog_update')]
-    public function update(BlogPost $post): Response
+    public function update(BlogPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
-        dd($post);
+        $form = $this->createForm(BlogPostType::class, $post);
+        $form->handleRequest($request);
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($post);
+            $entityManager->flush();
+
+            $this->addFlash('success', "Les modifications ont été enregistrées");
+            return $this->redirectToRoute('admin_blog_update', ['slug' => $post->getSlug()]);
+        }
 
         return $this->render('admin/blog/update.html.twig', [
-
+            'form' => $form->createView(),
         ]);
     }
 
