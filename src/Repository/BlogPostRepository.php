@@ -23,6 +23,8 @@ class BlogPostRepository extends ServiceEntityRepository
     public function findPublicPosts(): Query
     {
         return $this->createQueryBuilder('bp')
+            ->where('bp.status = :status')
+            ->setParameter('status', BlogPost::STATUS_ACTIVE)
             ->getQuery();
     }
 
