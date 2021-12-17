@@ -8,5 +8,31 @@
         <a href="{{ path('admin_blog_create') }}" class="btn btn-primary">Ajouter</a>
     </div>
 
-    <p>.. liste des articles que j'ai écrits ..</p>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Création</th>
+                <th>Modification</th>
+                <th>Auteur</th>
+                <th>Titre</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts %}
+                <tr>
+                    <td>{{ post.id }}</td>
+                    <td>{{ post.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ post.updatedAt|date('d/m/Y') }}</td>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>
+                        <a href="{{ path('admin_blog_delete', {slug: post.slug}) }}" class="btn btn-sm btn-danger me-2">Supprimer</a>
+                        <a href="{{ path('admin_blog_update', {slug: post.slug}) }}" class="btn btn-sm btn-primary">Editer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

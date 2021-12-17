@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
+use App\Repository\BlogPostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +15,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class BlogController extends AbstractController
 {
     #[Route('', name: 'admin_blog_index')]
-    public function index(): Response
+    public function index(BlogPostRepository $blogPostRepository): Response
     {
-        return $this->render('admin/blog/index.html.twig', [
+        $posts = $blogPostRepository->findAll();
 
+        return $this->render('admin/blog/index.html.twig', [
+            'posts' => $posts
         ]);
     }
 
@@ -54,8 +57,11 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}/delete', name: 'admin_blog_delete')]
-    public function delete(): Response
+    public function delete(BlogPost $post, EntityManagerInterface $entityManager): Response
     {
+        $entityManager->remove($post);
+        $entityManager->flush();
+        $this->addFlash('success', "L'article a bien été supprimé.");
         return $this->redirectToRoute('admin_blog_index');
     }
 }
