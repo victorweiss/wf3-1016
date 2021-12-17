@@ -22,31 +22,20 @@ class BlogController extends AbstractController
     }
 
     #[Route('/nouveau', name: 'admin_blog_create')]
-    public function create(
-        Request $request,
-        EntityManagerInterface $entityManager
-    ): Response
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new BlogPost();
-        $form = $this->createForm(BlogPostType::class, $post);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($post);
-            $entityManager->flush();
-
-            $this->addFlash('success', "Les modifications ont été enregistrées");
-            return $this->redirectToRoute('admin_blog_update', ['slug' => $post->getSlug()]);
-        }
-
-        return $this->render('admin/blog/create.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->_form('create', $post, $request, $entityManager);
     }
 
     #[Route('/{slug}', name: 'admin_blog_update')]
     public function update(BlogPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
+        return $this->_form('update', $post, $request, $entityManager);
+    }
+
+    private function _form(string $action, BlogPost $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
         $form = $this->createForm(BlogPostType::class, $post);
         $form->handleRequest($request);
 
@@ -58,8 +47,9 @@ class BlogController extends AbstractController
             return $this->redirectToRoute('admin_blog_update', ['slug' => $post->getSlug()]);
         }
 
-        return $this->render('admin/blog/update.html.twig', [
+        return $this->render("admin/blog/$action.html.twig", [
             'form' => $form->createView(),
+            'action' => $action
         ]);
     }
 

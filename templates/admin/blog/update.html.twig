@@ -5,24 +5,5 @@
 {% block body %}
 	<h1>Modifier un article</h1>
 
-	{{ form_start(form) }}
-
-	<div class="row">
-		<div class="col-lg-9">
-			{{ form_row(form.title) }}
-		</div>
-		<div class="col-lg-3">
-			{{ form_row(form.author) }}
-		</div>
-	</div>
-
-	{{ form_row(form.content) }}
-
-	{{ form_rest(form) }}
-
-	<div class="text-end">
-		<button type="submit" class="btn btn-primary">Modifier l'article</button>
-	</div>
-
-	{{ form_end(form) }}
+	{% include 'admin/blog/_form.html.twig' %}
 {% endblock %}
