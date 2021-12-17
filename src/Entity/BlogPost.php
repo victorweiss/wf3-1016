@@ -2,17 +2,21 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\CreatedAtTrait;
+use App\Entity\Traits\UpdatedAtTrait;
 use App\Repository\BlogPostRepository;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
 #[UniqueEntity(fields: 'slug', message: "Ce slug est déjà utilisé")]
 class BlogPost
 {
+    use CreatedAtTrait;
+    use UpdatedAtTrait;
+
     const STATUS_DRAFT = 'draft';
     const STATUS_ACTIVE = 'active';
 
@@ -26,6 +30,9 @@ class BlogPost
     #[Assert\Length(min: 20, max: 255)]
     private ?string $title = null;
 
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     */
     #[ORM\Column(type: 'string', length: 191, unique: true)]
     private ?string $slug = null;
 
@@ -38,19 +45,9 @@ class BlogPost
     #[Assert\Length(max: 255)]
     private ?string $author = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
-    private DateTimeImmutable $createdAt;
-
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?DateTimeInterface $updatedAt = null;
-
     #[ORM\Column(type: 'string', length: 255)]
     private string $status = self::STATUS_DRAFT;
 
-    public function __construct()
-    {
-        $this->createdAt = new DateTimeImmutable();
-    }
 
     public function getId(): ?int
     {
@@ -101,30 +98,6 @@ class BlogPost
     public function setAuthor(string $author): self
     {
         $this->author = $author;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(DateTimeImmutable $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdatedAt(): ?DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function setUpdatedAt(?DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
