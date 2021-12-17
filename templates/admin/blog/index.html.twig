@@ -16,6 +16,7 @@
                 <th>Modification</th>
                 <th>Auteur</th>
                 <th>Titre</th>
+                <th>Statut</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -28,8 +29,16 @@
                     <td>{{ post.author }}</td>
                     <td>{{ post.title }}</td>
                     <td>
+                        {{ post|badge }}
+                    </td>
+                    <td>
                         <a href="{{ path('admin_blog_delete', {slug: post.slug}) }}" class="btn btn-sm btn-danger me-2">Supprimer</a>
                         <a href="{{ path('admin_blog_update', {slug: post.slug}) }}" class="btn btn-sm btn-primary">Editer</a>
+                        {% if post.status == 'active' %}
+                            <a href="{{ path('admin_blog_status', {slug: post.slug, newStatus: 'draft'}) }}" class="btn btn-sm btn-warning">Désactiver</a>
+                        {% elseif post.status == 'draft' %}
+                            <a href="{{ path('admin_blog_status', {slug: post.slug, newStatus: 'active'}) }}" class="btn btn-sm btn-success">Activer</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

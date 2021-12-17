@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\BlogPost;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -16,6 +17,7 @@ class AppExtension extends AbstractExtension
             // Reference: https://twig.symfony.com/doc/2.x/advanced.html#automatic-escaping
             new TwigFilter('price', [$this, 'getPrice']),
             new TwigFilter('ellipsis', [$this, 'makeEllipsis']),
+            new TwigFilter('badge', [$this, 'getBadge'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -40,5 +42,17 @@ class AppExtension extends AbstractExtension
     {
         $dots = strlen($text) > $length ? '...' : '';
         return substr($text, 0, $length) . $dots;
+    }
+
+    public function getBadge(object $object): string
+    {
+        if ($object instanceof BlogPost) {
+            return match($object->getStatus()) {
+                BlogPost::STATUS_DRAFT => '<span class="badge bg-secondary">Brouillon</span>',
+                BlogPost::STATUS_ACTIVE => '<span class="badge bg-success">En ligne</span>'
+            };
+        }
+
+        return '';
     }
 }

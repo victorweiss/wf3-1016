@@ -64,4 +64,12 @@ class BlogController extends AbstractController
         $this->addFlash('success', "L'article a bien été supprimé.");
         return $this->redirectToRoute('admin_blog_index');
     }
+
+    #[Route('/{slug}/status/{newStatus}', name: 'admin_blog_status', requirements: ['newStatus' => 'active|draft'])]
+    public function status(BlogPost $post, string $newStatus, EntityManagerInterface $entityManager): Response
+    {
+        $post->setStatus($newStatus);
+        $entityManager->flush();
+        return $this->redirectToRoute('admin_blog_index');
+    }
 }
