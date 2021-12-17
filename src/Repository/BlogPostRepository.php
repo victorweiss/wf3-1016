@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BlogPost;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -17,6 +18,12 @@ class BlogPostRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, BlogPost::class);
+    }
+
+    public function findPublicPosts(): Query
+    {
+        return $this->createQueryBuilder('bp')
+            ->getQuery();
     }
 
     // /**
