@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const STATUS_ACTIVE = 'active';
+    const STATUS_BLOCKED = 'blocked';
+
     use CreatedAtTrait;
 
     #[ORM\Id]
@@ -39,6 +42,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank]
     #[Assert\Length(max: 255)]
     private $lastname;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $status = self::STATUS_ACTIVE;
+
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->status === self::STATUS_BLOCKED;
+    }
+
 
     public function getId(): ?int
     {
@@ -130,6 +148,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }
