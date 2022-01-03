@@ -26,5 +26,9 @@ class UserChecker implements UserCheckerInterface
             // the message passed to this exception is meant to be displayed to the user
             throw new CustomUserMessageAccountStatusException("Votre compte est bloqué !");
         }
+
+        if ($user->getStatus() === User::STATUS_PENDING_EMAIL_VERIFICATION) {
+            throw new CustomUserMessageAccountStatusException("Veuillez valider votre email.");
+        }
     }
 }

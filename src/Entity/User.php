@@ -14,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    const STATUS_PENDING_EMAIL_VERIFICATION = 'pending-email-verification';
     const STATUS_ACTIVE = 'active';
     const STATUS_BLOCKED = 'blocked';
 
@@ -44,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $status = self::STATUS_ACTIVE;
+    private $status = self::STATUS_PENDING_EMAIL_VERIFICATION;
 
 
     public function isActive(): bool
