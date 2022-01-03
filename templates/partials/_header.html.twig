@@ -26,15 +26,23 @@
 						<li class="nav-item">
 							<a class="nav-link" href="{{ path('contact') }}">Contact</a>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Admin
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li><a class="dropdown-item" href="{{ path('admin_contact_index') }}">Demandes de contact</a></li>
-								<li><a class="dropdown-item" href="{{ path('admin_blog_index') }}">Gestion du blog</a></li>
-							</ul>
-						</li>
+						{% if app.user %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									{{ is_granted('ROLE_ADMIN') ? "Admin" : "Mon espace" }}
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									{% if is_granted('ROLE_ADMIN') %}
+										<li><a class="dropdown-item" href="{{ path('admin_contact_index') }}">Demandes de contact</a></li>
+										<li><a class="dropdown-item" href="{{ path('admin_blog_index') }}">Gestion du blog</a></li>
+									{% else %}
+										{# liens pour les pages ROLE_USER #}
+									{% endif %}
+									<li><hr class="dropdown-divider"></li>
+									<li><a class="dropdown-item" href="{{ path('admin_redirect') }}">Accéder à mon espace</a></li>
+								</ul>
+							</li>
+						{% endif %}
 					</ul>
 					<ul class="navbar-nav mb-2 mb-lg-0">
 						{% if app.user %}
