@@ -14,6 +14,7 @@
 {#					<img src="..." class="card-img-top" alt="...">#}
 					<div class="card-body">
 						<h5 class="card-title">{{ post.title|ellipsis(20) }}</h5>
+						<div class="small text-muted">{{ post.comments.count }} Commentaires</div>
 						<p class="card-text">{{ post.content|ellipsis(70) }}</p>
 						<a href="{{ path('blog_view', {slug: post.slug}) }}" class="btn btn-primary">Lire l'article</a>
 					</div>

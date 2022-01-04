@@ -1,0 +1,4 @@
+<h1>Nouveau commentaire</h1>
+<p>Sur l'article : {{ post.title }}</p>
+<br>
+<a href="{{ absolute_url(path('blog_view', {slug: post.slug})) }}">Voir l'article</a>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BlogPost;
 use App\Entity\BlogPostComment;
+use App\Event\BlogPostCommentEvent;
 use App\Form\BlogPostCommentType;
 use App\Repository\BlogPostRepository;
 use App\Security\Voter\BlogPostVoter;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,7 +43,8 @@ class BlogController extends AbstractController
     public function view(
         BlogPost $post,
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $dispatcher
     ): Response
     {
         // Retourne une 404 si l'article est en Draft
@@ -61,6 +64,8 @@ class BlogController extends AbstractController
 
             $entityManager->persist($comment);
             $entityManager->flush();
+
+            $dispatcher->dispatch(new BlogPostCommentEvent($comment), BlogPostCommentEvent::PUBLISHED);
 
             return $this->redirectToRoute('blog_view', [
                 'slug' => $post->getSlug(),
