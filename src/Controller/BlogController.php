@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
+use App\Entity\BlogPostComment;
+use App\Form\BlogPostCommentType;
 use App\Repository\BlogPostRepository;
 use App\Security\Voter\BlogPostVoter;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,15 +38,39 @@ class BlogController extends AbstractController
 
     #[Route('/{slug}', name: 'blog_view')]
     #[IsGranted(BlogPostVoter::VIEW, subject: 'post')]
-    public function view(BlogPost $post): Response
+    public function view(
+        BlogPost $post,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): Response
     {
         // Retourne une 404 si l'article est en Draft
         // if ($post->getStatus() !== BlogPost::STATUS_ACTIVE) {
         //     throw $this->createNotFoundException();
         // }
 
+        $comment = new BlogPostComment();
+        $form = $this->createForm(BlogPostCommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment
+                ->setUser($this->getUser())
+                ->setBlogPost($post)
+            ;
+
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('blog_view', [
+                'slug' => $post->getSlug(),
+                '_fragment' => 'comment-' . $comment->getId(),
+            ]);
+        }
+
         return $this->render('blog/view.html.twig', [
-            'post' => $post
+            'post' => $post,
+            'form' => $form->createView(),
         ]);
     }
 }

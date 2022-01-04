@@ -9,4 +9,37 @@
 	<div>
 		{{ post.content|nl2br }}
 	</div>
+
+	<hr>
+	<h2>Les commentaires :</h2>
+
+	{% for comment in post.comments %}
+		<div class="mb-3 border rounded p-3" id="comment-{{ comment.id }}">
+			<div class="small text-muted">Publié par {{ comment.user.fullname }} le {{ comment.createdAt|date('d/m/Y \\à H\\hi') }}</div>
+			<div>{{ comment.comment|nl2br }}</div>
+		</div>
+	{% endfor %}
+
+
+	<hr>
+	<h2>Commentez l'article</h2>
+
+	{% if app.user %}
+		{{ form_start(form) }}
+
+		{{ form_row(form.comment) }}
+
+		<div class="text-end mt-3">
+			<button type="submit" class="btn btn-primary">Publier</button>
+		</div>
+
+		{{ form_end(form) }}
+	{% else %}
+	    <p>
+		    Pour pouvoir commenter l'article,
+		    veuillez <a href="{{ path('app_login') }}">vous connecter</a>
+		    ou <a href="{{ path('app_register') }}">vous inscrire</a>.
+	    </p>
+	{% endif %}
+
 {% endblock %}
