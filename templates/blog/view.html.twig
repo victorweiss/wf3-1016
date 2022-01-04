@@ -15,10 +15,20 @@
 
 	{% for comment in post.comments %}
 		<div class="mb-3 border rounded p-3" id="comment-{{ comment.id }}">
-			<div class="small text-muted">Publié par {{ comment.user.fullname }} le {{ comment.createdAt|date('d/m/Y \\à H\\hi') }}</div>
+			<div class="d-flex justify-content-between">
+				<div class="small text-muted">Publié par {{ comment.user.fullname }} le {{ comment.createdAt|date('d/m/Y \\à H\\hi') }}</div>
+				{% if is_granted('ROLE_ADMIN') %}
+					<a href="{{ path('user_blog_comment_delete', {id: comment.id}) }}" class="btn btn-danger btn-sm">X</a>
+				{% endif %}
+			</div>
+
 			<div>{{ comment.comment|nl2br }}</div>
 		</div>
 	{% endfor %}
+
+	{% if post.comments is empty %}
+		<p>Il n'y a aucun commentaire pour le moment.</p>
+	{% endif %}
 
 
 	<hr>

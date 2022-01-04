@@ -3,12 +3,14 @@
 namespace App\Controller\User;
 
 use App\Entity\BlogPost;
+use App\Entity\BlogPostComment;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
 use App\Security\Voter\BlogPostVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -81,5 +83,18 @@ class BlogController extends AbstractController
         $post->setStatus($newStatus);
         $entityManager->flush();
         return $this->redirectToRoute('user_blog_index');
+    }
+
+    #[Route('/comment/{id}/delete', name: 'user_blog_comment_delete')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function deleteComment(
+        BlogPostComment $comment,
+        EntityManagerInterface $entityManager
+    ): RedirectResponse
+    {
+        $blogPost = $comment->getBlogPost();
+        $entityManager->remove($comment);
+        $entityManager->flush();
+        return $this->redirectToRoute('blog_view', ['slug' => $blogPost->getSlug()]);
     }
 }
