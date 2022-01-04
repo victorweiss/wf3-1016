@@ -12,6 +12,7 @@ class BlogPostVoter extends Voter
 {
     const VIEW = 'view';
     const EDIT = 'edit';
+    const DELETE = 'delete';
 
     public function __construct(
         private Security $security
@@ -21,7 +22,7 @@ class BlogPostVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, [self::VIEW, self::EDIT])
+        return in_array($attribute, [self::VIEW, self::EDIT, self::DELETE])
             && $subject instanceof BlogPost;
     }
 
@@ -32,6 +33,7 @@ class BlogPostVoter extends Voter
         return match($attribute) {
             self::VIEW => $this->canView($post),
             self::EDIT => $this->canEdit($post, $user),
+            self::DELETE => $this->canDelete($post, $user),
             default => false,
         };
     }
@@ -42,6 +44,12 @@ class BlogPostVoter extends Voter
     }
 
     private function canEdit(BlogPost $post, ?User $user): bool
+    {
+        return $post->getUser() === $user
+            || $this->security->isGranted('ROLE_ADMIN');
+    }
+
+    private function canDelete(BlogPost $post, ?User $user): bool
     {
         return $post->getUser() === $user
             || $this->security->isGranted('ROLE_ADMIN');

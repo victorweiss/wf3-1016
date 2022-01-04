@@ -65,6 +65,7 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}/delete', name: 'user_blog_delete')]
+    #[IsGranted(BlogPostVoter::DELETE, subject: 'post')]
     public function delete(BlogPost $post, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($post);
@@ -74,6 +75,7 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}/status/{newStatus}', name: 'user_blog_status', requirements: ['newStatus' => 'active|draft'])]
+    #[IsGranted(BlogPostVoter::EDIT, subject: 'post')]
     public function status(BlogPost $post, string $newStatus, EntityManagerInterface $entityManager): Response
     {
         $post->setStatus($newStatus);
