@@ -5,7 +5,9 @@ namespace App\Controller\User;
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
 use App\Repository\BlogPostRepository;
+use App\Security\Voter\BlogPostVoter;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +19,11 @@ class BlogController extends AbstractController
     #[Route('', name: 'user_blog_index')]
     public function index(BlogPostRepository $blogPostRepository): Response
     {
-        $posts = $blogPostRepository->findAll();
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $posts = $blogPostRepository->findAll();
+        } else {
+            $posts = $blogPostRepository->findBy(['user' => $this->getUser()]);
+        }
 
         return $this->render('admin/blog/index.html.twig', [
             'posts' => $posts
@@ -33,6 +39,7 @@ class BlogController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'user_blog_update')]
+    #[IsGranted(BlogPostVoter::EDIT, subject: 'post')]
     public function update(BlogPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         return $this->_form('update', $post, $request, $entityManager);
