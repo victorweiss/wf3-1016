@@ -2,15 +2,15 @@ controllers:
     resource: ../../src/Controller/
     type: annotation
 
-#admin:
-#    resource: ../../src/Controller/Admin/
-#    type: annotation
-#    prefix: '/a/admin'
-#
-#user:
-#    resource: ../../src/Controller/User/
-#    type: annotation
-#    prefix: '/a/espace-membre'
+admin:
+    resource: ../../src/Controller/Admin/
+    type: annotation
+    prefix: /a/admin
+
+user:
+    resource: ../../src/Controller/User/
+    type: annotation
+    prefix: /a/espace-membre
 
 kernel:
     resource: ../../src/Kernel.php
