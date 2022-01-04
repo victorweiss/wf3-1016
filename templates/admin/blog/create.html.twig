@@ -3,6 +3,8 @@
 {% block title "Nouvel article" %}
 
 {% block body %}
+	<a href="{{ path('user_blog_index') }}"><- Retour</a>
+
 	<h1>Nouvel article</h1>
 
 	{% include 'admin/blog/_form.html.twig' %}

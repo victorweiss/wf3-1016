@@ -41,12 +41,11 @@ class BlogPost
     private ?string $content = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    #[Assert\NotBlank]
-    #[Assert\Length(max: 255)]
-    private ?string $author = null;
-
-    #[ORM\Column(type: 'string', length: 255)]
     private string $status = self::STATUS_DRAFT;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'blogPosts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $user;
 
 
     public function getId(): ?int
@@ -90,18 +89,6 @@ class BlogPost
         return $this;
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
     public function getStatus(): string
     {
         return $this->status;
@@ -110,6 +97,18 @@ class BlogPost
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }

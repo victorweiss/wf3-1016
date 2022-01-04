@@ -17,9 +17,6 @@ class BlogPostType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => "Titre de l'article",
             ])
-            ->add('author', TextType::class, [
-                'label' => "Auteur",
-            ])
             ->add('content', TextareaType::class, [
                 'label' => "Contenu de l'article",
                 'attr' => [

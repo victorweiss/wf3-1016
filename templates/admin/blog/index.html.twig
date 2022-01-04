@@ -5,7 +5,7 @@
 {% block body %}
     <div class="d-flex justify-content-between align-items-center">
         <h1>Gestion du blog</h1>
-        <a href="{{ path('admin_blog_create') }}" class="btn btn-primary">Ajouter</a>
+        <a href="{{ path('user_blog_create') }}" class="btn btn-primary">Ajouter</a>
     </div>
 
     <table class="table table-striped">
@@ -14,7 +14,9 @@
                 <th>ID</th>
                 <th>Création</th>
                 <th>Modification</th>
-                <th>Auteur</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <th>Auteur</th>
+                {% endif %}
                 <th>Titre</th>
                 <th>Statut</th>
                 <th>Action</th>
@@ -26,18 +28,20 @@
                     <td>{{ post.id }}</td>
                     <td>{{ post.createdAt|date('d/m/Y') }}</td>
                     <td>{{ post.updatedAt|date('d/m/Y') }}</td>
-                    <td>{{ post.author }}</td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>{{ post.user.fullname }}</td>
+                    {% endif %}
                     <td>{{ post.title }}</td>
                     <td>
                         {{ post|badge }}
                     </td>
                     <td>
-                        <a href="{{ path('admin_blog_delete', {slug: post.slug}) }}" class="btn btn-sm btn-danger me-2">Supprimer</a>
-                        <a href="{{ path('admin_blog_update', {slug: post.slug}) }}" class="btn btn-sm btn-primary">Editer</a>
+                        <a href="{{ path('user_blog_delete', {slug: post.slug}) }}" class="btn btn-sm btn-danger me-2">Supprimer</a>
+                        <a href="{{ path('user_blog_update', {slug: post.slug}) }}" class="btn btn-sm btn-primary">Editer</a>
                         {% if post.status == 'active' %}
-                            <a href="{{ path('admin_blog_status', {slug: post.slug, newStatus: 'draft'}) }}" class="btn btn-sm btn-warning">Désactiver</a>
+                            <a href="{{ path('user_blog_status', {slug: post.slug, newStatus: 'draft'}) }}" class="btn btn-sm btn-warning">Désactiver</a>
                         {% elseif post.status == 'draft' %}
-                            <a href="{{ path('admin_blog_status', {slug: post.slug, newStatus: 'active'}) }}" class="btn btn-sm btn-success">Activer</a>
+                            <a href="{{ path('user_blog_status', {slug: post.slug, newStatus: 'active'}) }}" class="btn btn-sm btn-success">Activer</a>
                         {% endif %}
                     </td>
                 </tr>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\User;
 
 use App\Entity\BlogPost;
 use App\Form\BlogPostType;
@@ -11,10 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin/blog')]
+#[Route('/a/espace-membre/blog')]
 class BlogController extends AbstractController
 {
-    #[Route('', name: 'admin_blog_index')]
+    #[Route('', name: 'user_blog_index')]
     public function index(BlogPostRepository $blogPostRepository): Response
     {
         $posts = $blogPostRepository->findAll();
@@ -24,14 +24,15 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/nouveau', name: 'admin_blog_create')]
+    #[Route('/nouveau', name: 'user_blog_create')]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new BlogPost();
+        $post->setUser($this->getUser());
         return $this->_form('create', $post, $request, $entityManager);
     }
 
-    #[Route('/{slug}', name: 'admin_blog_update')]
+    #[Route('/{slug}', name: 'user_blog_update')]
     public function update(BlogPost $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         return $this->_form('update', $post, $request, $entityManager);
@@ -47,7 +48,7 @@ class BlogController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', "Les modifications ont été enregistrées");
-            return $this->redirectToRoute('admin_blog_update', ['slug' => $post->getSlug()]);
+            return $this->redirectToRoute('user_blog_update', ['slug' => $post->getSlug()]);
         }
 
         return $this->render("admin/blog/$action.html.twig", [
@@ -56,20 +57,20 @@ class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}/delete', name: 'admin_blog_delete')]
+    #[Route('/{slug}/delete', name: 'user_blog_delete')]
     public function delete(BlogPost $post, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($post);
         $entityManager->flush();
         $this->addFlash('success', "L'article a bien été supprimé.");
-        return $this->redirectToRoute('admin_blog_index');
+        return $this->redirectToRoute('user_blog_index');
     }
 
-    #[Route('/{slug}/status/{newStatus}', name: 'admin_blog_status', requirements: ['newStatus' => 'active|draft'])]
+    #[Route('/{slug}/status/{newStatus}', name: 'user_blog_status', requirements: ['newStatus' => 'active|draft'])]
     public function status(BlogPost $post, string $newStatus, EntityManagerInterface $entityManager): Response
     {
         $post->setStatus($newStatus);
         $entityManager->flush();
-        return $this->redirectToRoute('admin_blog_index');
+        return $this->redirectToRoute('user_blog_index');
     }
 }

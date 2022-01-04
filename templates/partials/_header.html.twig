@@ -34,9 +34,10 @@
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 									{% if is_granted('ROLE_ADMIN') %}
 										<li><a class="dropdown-item" href="{{ path('admin_contact_index') }}">Demandes de contact</a></li>
-										<li><a class="dropdown-item" href="{{ path('admin_blog_index') }}">Gestion du blog</a></li>
+										<li><a class="dropdown-item" href="{{ path('user_blog_index') }}">Gestion du blog</a></li>
 									{% else %}
 										{# liens pour les pages ROLE_USER #}
+										<li><a class="dropdown-item" href="{{ path('user_blog_index') }}">Gestion du blog</a></li>
 									{% endif %}
 									<li><hr class="dropdown-divider"></li>
 									<li><a class="dropdown-item" href="{{ path('admin_redirect') }}">Accéder à mon espace</a></li>
